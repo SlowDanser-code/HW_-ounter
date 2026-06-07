@@ -1,45 +1,35 @@
 using System.Collections;
 using UnityEngine;
-using TMPro;
+using System;
 
 public class Counter : MonoBehaviour
 {
-    [SerializeField] private TMP_Text counterText;
+    private int _value;
+    private Coroutine _countingCoroutine;
 
-    private int counter = 0;
-    private bool isCounting = false;
-    private Coroutine counterCoroutine;
+    public event Action<int> ValueChanged;
 
-    void Start()
+    public void Toggle()
     {
-        counterText.text = counter.ToString();
-    }
-
-    void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
+        if (_countingCoroutine == null)
         {
-            if (!isCounting)
-            {
-                isCounting = true;
-                counterCoroutine = StartCoroutine(Count());
-            }
-            else
-            {
-                isCounting = false;
-                StopCoroutine(counterCoroutine);
-            }
+            _countingCoroutine = StartCoroutine(Increase());
+        }
+        else
+        {
+            StopCoroutine(_countingCoroutine);
+            _countingCoroutine = null;
         }
     }
 
-    IEnumerator Count()
+    private IEnumerator Increase()
     {
         while (true)
         {
             yield return new WaitForSeconds(0.5f);
 
-            counter++;
-            counterText.text = counter.ToString();
+            _value++;
+            ValueChanged?.Invoke(_value);
         }
     }
 }
