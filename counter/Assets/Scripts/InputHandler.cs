@@ -1,14 +1,15 @@
+using System;
 using UnityEngine;
 
 public class InputHandler : MonoBehaviour
 {
-    [SerializeField] private Counter _counter;
+    public event Action MouseClicked;
 
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            _counter.Toggle();
+            MouseClicked?.Invoke();
         }
     }
 }

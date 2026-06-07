@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using UnityEngine;
-using System;
 
 public class Counter : MonoBehaviour
 {
+    [SerializeField] private float _delay = 0.5f;
+
     private int _value;
     private Coroutine _countingCoroutine;
 
@@ -26,7 +28,7 @@ public class Counter : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(_delay);
 
             _value++;
             ValueChanged?.Invoke(_value);
